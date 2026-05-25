@@ -1,0 +1,64 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>My Transport Pass</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="qr-card">
+    <div class="qr-card__header">
+      <span>{{ period || '—' }}</span>
+      <span class="bold">Transport Pass</span>
+    </div>
+    <div class="qr-card__body">
+      <div class="qr-img-wrap" *ngIf="qrDataUrl">
+        <img [src]="qrDataUrl" alt="QR" />
+      </div>
+      <div class="qr-img-wrap empty" *ngIf="!qrDataUrl">
+        <ion-icon name="qr-code-outline"></ion-icon>
+        <p class="muted-text text-small">Awaiting payment validation</p>
+      </div>
+      <div class="qr-meta">
+        <div class="bold">{{ user?.full_name }}</div>
+        <div class="muted-text text-small">{{ user?.student_id || '—' }}</div>
+        <app-status-badge *ngIf="availableOffline" label="Available offline" tone="success"></app-status-badge>
+      </div>
+    </div>
+  </div>
+
+  <app-section-header title="My Reservation"></app-section-header>
+  <div class="app-card" *ngIf="reservation">
+    <div class="row-flex space-between">
+      <app-status-badge label="Confirmed" tone="success"></app-status-badge>
+      <span class="muted-text text-small">{{ period }}</span>
+    </div>
+    <div class="bold" style="margin-top: 8px;">Bus {{ reservation.bus_plate }}</div>
+    <div class="muted-text text-small">{{ reservation.pickup_name }} ➜ Eyang</div>
+  </div>
+
+  <div class="app-card" *ngIf="!reservation">
+    <div class="bold" style="margin-bottom:8px;">Reserve your spot for the month</div>
+    <ion-item lines="full">
+      <ion-label position="stacked">Bus</ion-label>
+      <ion-select [(ngModel)]="selectedBus" placeholder="Choose a bus">
+        <ion-select-option *ngFor="let b of buses" [value]="b.id">
+          {{ b.plate_number }} — {{ b.color }} ({{ (b.reserved_count || 0) }}/{{ b.capacity }})
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="stacked">Pickup point</ion-label>
+      <ion-select [(ngModel)]="selectedPickup" placeholder="Choose pickup point">
+        <ion-select-option *ngFor="let p of pickupPoints" [value]="p.id">{{ p.name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button
+      expand="block"
+      style="margin-top:8px;"
+      [disabled]="!selectedBus || !selectedPickup || reserving"
+      (click)="reserve()">
+      <ion-spinner *ngIf="reserving" name="dots" slot="start"></ion-spinner>
+      Confirm reservation
+    </ion-button>
+  </div>
+</ion-content>

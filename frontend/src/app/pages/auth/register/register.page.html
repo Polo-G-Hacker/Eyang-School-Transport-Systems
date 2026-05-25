@@ -1,0 +1,48 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="login-wrap">
+    <div class="brand">
+      <div class="logo-circle"><ion-icon name="person-add-outline"></ion-icon></div>
+      <div class="app-name">Create your account</div>
+      <div class="muted-text text-small">Institutional or personal email — both are supported.</div>
+    </div>
+
+    <div *ngIf="done" class="app-card lg login-card" style="text-align:center;">
+      <ion-icon name="mail-outline" style="font-size:48px;color:#10B981;"></ion-icon>
+      <h2 class="title" style="margin-top: 12px;">Check your email</h2>
+      <p class="muted-text">We sent a verification link to <strong>{{ email }}</strong>. After verifying, you can sign in.</p>
+      <ion-button expand="block" class="primary-btn" (click)="goLogin()">Back to sign in</ion-button>
+    </div>
+
+    <form *ngIf="!done" (ngSubmit)="submit()" class="app-card lg login-card">
+      <ion-segment [(ngModel)]="role" name="role">
+        <ion-segment-button value="student"><ion-label>Student</ion-label></ion-segment-button>
+        <ion-segment-button value="driver"><ion-label>Driver</ion-label></ion-segment-button>
+      </ion-segment>
+
+      <ion-item lines="full">
+        <ion-input label="Full name" labelPlacement="floating" [(ngModel)]="full_name" name="full_name" required></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-input label="Email" labelPlacement="floating" type="email" [(ngModel)]="email" name="email" required></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-input label="Password (min 8)" labelPlacement="floating" type="password" [(ngModel)]="password" name="password" required></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-input label="Phone (optional)" labelPlacement="floating" type="tel" [(ngModel)]="phone" name="phone"></ion-input>
+      </ion-item>
+      <ion-item lines="full" *ngIf="role === 'student'">
+        <ion-input label="Student ID (optional)" labelPlacement="floating" [(ngModel)]="student_id" name="student_id"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="submit" class="primary-btn" [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="dots" slot="start"></ion-spinner>
+        Create account
+      </ion-button>
+
+      <div class="row-flex space-between extra">
+        <a routerLink="/login">Back to sign in</a>
+      </div>
+    </form>
+  </div>
+</ion-content>

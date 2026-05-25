@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="app-card lg" style="text-align:center;">
+    <div style="font-weight:700; font-size:18px;">{{ user?.full_name }}</div>
+    <div class="muted-text">{{ user?.email }}</div>
+    <app-status-badge label="Administrator" tone="primary"></app-status-badge>
+  </div>
+
+  <app-section-header title="School"></app-section-header>
+  <div class="app-card">
+    <div>{{ schoolName }}</div>
+    <div class="muted-text text-small">{{ appName }}</div>
+  </div>
+
+  <app-section-header title="Pricing"></app-section-header>
+  <div class="app-card">
+    <div>Monthly fee: <strong>{{ fee | number }} {{ currency }}</strong></div>
+  </div>
+
+  <app-section-header title="Pickup points"></app-section-header>
+  <div class="app-card" *ngFor="let p of pickupPoints">
+    <div class="row-flex space-between">
+      <div>
+        <div style="font-weight:600;">{{ p.name }}</div>
+        <div class="muted-text text-tiny">{{ p.latitude }}, {{ p.longitude }}</div>
+      </div>
+      <app-status-badge [label]="p.is_destination ? 'Destination' : 'Pickup'" [tone]="p.is_destination ? 'success' : 'muted'"></app-status-badge>
+    </div>
+  </div>
+
+  <ion-button expand="block" color="danger" fill="outline" (click)="logout()">
+    <ion-icon name="log-out-outline" slot="start"></ion-icon>
+    Sign out
+  </ion-button>
+</ion-content>

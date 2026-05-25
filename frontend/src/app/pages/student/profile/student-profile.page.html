@@ -1,0 +1,42 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="app-card lg" style="text-align:center;">
+    <div class="avatar-fallback" style="margin: 0 auto 12px; width: 72px; height: 72px; font-size: 24px;">
+      {{ (user?.full_name || '?') | slice:0:1 }}
+    </div>
+    <div style="font-weight:700; font-size:18px;">{{ user?.full_name }}</div>
+    <div class="muted-text">{{ user?.email }}</div>
+    <div class="muted-text text-small" *ngIf="user?.student_id">ID: {{ user?.student_id }}</div>
+    <app-status-badge [label]="user?.status || ''" [tone]="user?.status === 'approved' ? 'success' : 'warning'"></app-status-badge>
+  </div>
+
+  <div class="app-card">
+    <div class="row-flex space-between">
+      <div>
+        <div class="muted-text text-small">Program</div>
+        <div style="font-weight:600;">{{ user?.program?.level }} — {{ user?.program?.field || 'Not set' }}</div>
+      </div>
+      <ion-icon name="chevron-forward" color="medium"></ion-icon>
+    </div>
+  </div>
+
+  <div class="app-card">
+    <div class="row-flex space-between">
+      <div>
+        <div class="muted-text text-small">Pickup point</div>
+        <div style="font-weight:600;">{{ user?.pickup_point?.name || 'Not set' }}</div>
+      </div>
+      <ion-icon name="chevron-forward" color="medium"></ion-icon>
+    </div>
+  </div>
+
+  <ion-button expand="block" color="danger" fill="outline" (click)="logout()">
+    <ion-icon slot="start" name="log-out-outline"></ion-icon>
+    Sign out
+  </ion-button>
+</ion-content>

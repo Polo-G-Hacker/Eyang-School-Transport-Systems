@@ -1,0 +1,76 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Admin Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh(); $event.target.complete()">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="welcome">
+    <div>
+      <div class="muted-text text-small">Welcome,</div>
+      <div class="page-title">{{ user?.full_name }}</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <app-stat-card label="Active students" [value]="summary?.validated || 0" tone="success" icon="people-outline"></app-stat-card>
+    <app-stat-card label="Pending payments" [value]="summary?.pending || 0" tone="warning" icon="time-outline"></app-stat-card>
+    <app-stat-card label="On route" [value]="fleetStats.on_route" tone="primary" icon="bus-outline"></app-stat-card>
+    <app-stat-card label="Fleet seats" [value]="fleetStats.total_seats" tone="muted" icon="grid-outline"></app-stat-card>
+  </div>
+
+  <app-section-header title="Monthly collection" action="View payments" (actionClick)="router.navigate(['/app/admin/payments'])"></app-section-header>
+  <div class="app-card" *ngIf="summary">
+    <div class="row-flex space-between">
+      <div>
+        <div class="muted-text text-small">Collected</div>
+        <div class="big">{{ summary.total_collected | number }} {{ currency }}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="muted-text text-small">Expected</div>
+        <div>{{ summary.expected | number }} {{ currency }}</div>
+      </div>
+    </div>
+    <app-progress-bar
+      [value]="summary.collection_rate"
+      [max]="100"
+      [tone]="summary.collection_rate >= 80 ? 'success' : summary.collection_rate >= 50 ? 'warning' : 'danger'">
+    </app-progress-bar>
+    <div class="muted-text text-tiny" style="margin-top:6px;">{{ summary.collection_rate }}% collected</div>
+  </div>
+
+  <app-section-header title="Pending validations" action="Manage" (actionClick)="router.navigate(['/app/admin/payments'])"></app-section-header>
+  <div class="app-card" *ngFor="let p of pendingPayments">
+    <div class="row-flex space-between">
+      <div>
+        <div class="bold">{{ p.full_name }}</div>
+        <div class="muted-text text-small">{{ p.period_month }}/{{ p.period_year }}</div>
+      </div>
+      <div class="bold">{{ p.amount_fcfa | number }} {{ currency }}</div>
+    </div>
+  </div>
+  <div class="app-card" *ngIf="pendingPayments.length === 0">
+    <div class="muted-text">No pending payments. </div>
+  </div>
+
+  <app-section-header title="Buses on route"></app-section-header>
+  <app-bus-card *ngFor="let b of buses" [bus]="$any(b)"></app-bus-card>
+
+  <app-section-header title="New accounts" action="Manage" (actionClick)="router.navigate(['/app/admin/students'])"></app-section-header>
+  <div class="app-card" *ngFor="let u of pendingUsers">
+    <div class="row-flex space-between">
+      <div>
+        <div class="bold">{{ u.full_name }}</div>
+        <div class="muted-text text-small">{{ u.email }} · {{ u.role }}</div>
+      </div>
+      <app-status-badge label="Pending" tone="warning"></app-status-badge>
+    </div>
+  </div>
+  <div class="app-card" *ngIf="pendingUsers.length === 0">
+    <div class="muted-text">No pending accounts.</div>
+  </div>
+</ion-content>

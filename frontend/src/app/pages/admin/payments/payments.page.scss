@@ -1,0 +1,5 @@
+.big { font-size: 22px; font-weight: 800; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px 0; }
+@media (max-width: 540px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+.bold { font-weight: 700; color: #0F172A; }
+.actions { margin-top: 10px; }

@@ -1,0 +1,16 @@
+.qr-host {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 12px;
+  aspect-ratio: 1 / 1;
+  background: #0F172A;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.result-icon {
+  width: 36px; height: 36px; border-radius: 999px; color:#fff; display:flex; align-items:center; justify-content:center;
+  background: #94A3B8; margin-right: 10px; font-size: 18px;
+}
+.result-icon.success { background: #10B981; }
+.result-icon.danger  { background: #EF4444; }
+.bold { font-weight: 700; color:#0F172A; }

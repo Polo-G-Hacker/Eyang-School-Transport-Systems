@@ -1,0 +1,80 @@
+/* ESTS Transport — design tokens matched to mockups */
+:root {
+  --ion-color-primary:       #2563EB;
+  --ion-color-primary-rgb:   37,99,235;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #1D4ED8;
+  --ion-color-primary-tint:  #3B82F6;
+
+  --ion-color-secondary:       #3B82F6;
+  --ion-color-secondary-rgb:   59,130,246;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255,255,255;
+  --ion-color-secondary-shade: #2563EB;
+  --ion-color-secondary-tint:  #60A5FA;
+
+  --ion-color-success:         #10B981;
+  --ion-color-success-rgb:     16,185,129;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255,255,255;
+  --ion-color-success-shade:   #059669;
+  --ion-color-success-tint:    #34D399;
+
+  --ion-color-warning:         #F59E0B;
+  --ion-color-warning-rgb:     245,158,11;
+  --ion-color-warning-contrast: #1F2937;
+  --ion-color-warning-contrast-rgb: 31,41,55;
+  --ion-color-warning-shade:   #D97706;
+  --ion-color-warning-tint:    #FBBF24;
+
+  --ion-color-danger:          #EF4444;
+  --ion-color-danger-rgb:      239,68,68;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255,255,255;
+  --ion-color-danger-shade:    #DC2626;
+  --ion-color-danger-tint:     #F87171;
+
+  --ion-color-medium:          #94A3B8;
+  --ion-color-medium-rgb:      148,163,184;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255,255,255;
+  --ion-color-medium-shade:    #64748B;
+  --ion-color-medium-tint:     #CBD5E1;
+
+  --ion-color-light:           #F1F5F9;
+  --ion-color-light-rgb:       241,245,249;
+  --ion-color-light-contrast:  #0F172A;
+  --ion-color-light-contrast-rgb: 15,23,42;
+  --ion-color-light-shade:     #E2E8F0;
+  --ion-color-light-tint:      #F8FAFC;
+
+  --ion-background-color:      #F8FAFC;
+  --ion-background-color-rgb:  248,250,252;
+  --ion-text-color:            #0F172A;
+  --ion-text-color-rgb:        15,23,42;
+
+  --app-card-bg:               #ffffff;
+  --app-card-border:           #E2E8F0;
+  --app-muted:                 #64748B;
+  --app-radius:                14px;
+  --app-radius-lg:             20px;
+  --app-shadow:                0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+/* Status pill helpers */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+.pill.success { background: rgba(16,185,129,0.12); color: #047857; }
+.pill.warning { background: rgba(245,158,11,0.15); color: #B45309; }
+.pill.danger  { background: rgba(239,68,68,0.12); color: #B91C1C; }
+.pill.primary { background: rgba(37,99,235,0.12); color: #1D4ED8; }
+.pill.muted   { background: rgba(100,116,139,0.12); color: #475569; }

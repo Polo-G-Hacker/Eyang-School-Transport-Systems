@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Fleet</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showForm = !showForm">
+        <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="grid-3">
+    <app-stat-card label="On route" [value]="stats.on_route" tone="success" icon="navigate-outline"></app-stat-card>
+    <app-stat-card label="Idle" [value]="stats.idle" tone="muted" icon="pause-circle-outline"></app-stat-card>
+    <app-stat-card label="Seats" [value]="stats.total_seats" tone="primary" icon="grid-outline"></app-stat-card>
+  </div>
+
+  <div class="app-card" *ngIf="showForm">
+    <div class="bold">Add a bus</div>
+    <ion-item lines="full">
+      <ion-input label="Plate number" labelPlacement="floating" [(ngModel)]="form.plate_number"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-input label="Color" labelPlacement="floating" [(ngModel)]="form.color"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-input label="Capacity" labelPlacement="floating" type="number" [(ngModel)]="form.capacity"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="stacked">Assign driver (optional)</ion-label>
+      <ion-select [(ngModel)]="form.driver_id" placeholder="Select driver">
+        <ion-select-option [value]="null">— Unassigned —</ion-select-option>
+        <ion-select-option *ngFor="let d of drivers" [value]="d.id">{{ d.full_name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button expand="block" (click)="create()" [disabled]="saving">
+      <ion-spinner *ngIf="saving" name="dots" slot="start"></ion-spinner>
+      Add bus
+    </ion-button>
+  </div>
+
+  <app-section-header title="Buses"></app-section-header>
+  <div *ngFor="let b of buses; trackBy: tb">
+    <app-bus-card [bus]="$any(b)"></app-bus-card>
+    <div class="row-actions">
+      <ion-button size="small" fill="outline" (click)="assignDriver(b)">
+        <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+        {{ b.driver_name ? 'Reassign driver' : 'Assign driver' }}
+      </ion-button>
+    </div>
+  </div>
+  <div class="app-card" *ngIf="buses.length === 0">
+    <div class="muted-text">No buses yet — add the first one above.</div>
+  </div>
+</ion-content>

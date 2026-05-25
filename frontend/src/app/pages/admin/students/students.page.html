@@ -1,0 +1,50 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Students &amp; Drivers</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-searchbar [(ngModel)]="search" (ionChange)="refresh()" debounce="400" placeholder="Search by name or email"></ion-searchbar>
+
+  <ion-segment [(ngModel)]="filter" (ionChange)="refresh()" scrollable>
+    <ion-segment-button value=""><ion-label>All</ion-label></ion-segment-button>
+    <ion-segment-button value="student"><ion-label>Students</ion-label></ion-segment-button>
+    <ion-segment-button value="driver"><ion-label>Drivers</ion-label></ion-segment-button>
+    <ion-segment-button value="admin"><ion-label>Admins</ion-label></ion-segment-button>
+  </ion-segment>
+
+  <ion-segment [(ngModel)]="status" (ionChange)="refresh()" scrollable style="margin-top: 8px;">
+    <ion-segment-button value=""><ion-label>All</ion-label></ion-segment-button>
+    <ion-segment-button value="pending"><ion-label>Pending</ion-label></ion-segment-button>
+    <ion-segment-button value="approved"><ion-label>Approved</ion-label></ion-segment-button>
+    <ion-segment-button value="disabled"><ion-label>Disabled</ion-label></ion-segment-button>
+  </ion-segment>
+
+  <div class="app-card" *ngFor="let u of users; trackBy: tb">
+    <div class="row-flex space-between">
+      <div class="row-flex">
+        <div class="avatar-fallback">{{ (u.full_name || '?') | slice:0:1 }}</div>
+        <div>
+          <div class="bold">{{ u.full_name }}</div>
+          <div class="muted-text text-small">{{ u.email }}</div>
+          <div class="muted-text text-tiny">
+            <span *ngIf="u.role === 'student' && u.student_id">{{ u.student_id }} · </span>
+            <span *ngIf="u.program">{{ u.program.level }} {{ u.program.field }} · </span>
+            <span>{{ u.role }}</span>
+            <span *ngIf="u.pickup_point"> · {{ u.pickup_point.name }}</span>
+          </div>
+        </div>
+      </div>
+      <app-status-badge [label]="u.status" [tone]="tone(u.status)"></app-status-badge>
+    </div>
+    <div class="actions">
+      <ion-button size="small" fill="solid" color="success" (click)="setStatus(u, 'approved')" *ngIf="u.status !== 'approved'">Approve</ion-button>
+      <ion-button size="small" fill="outline" color="warning" (click)="setStatus(u, 'pending')" *ngIf="u.status !== 'pending'">Hold</ion-button>
+      <ion-button size="small" fill="outline" color="danger" (click)="setStatus(u, 'disabled')" *ngIf="u.status !== 'disabled'">Disable</ion-button>
+    </div>
+  </div>
+  <div class="app-card" *ngIf="users.length === 0 && !loading">
+    <div class="muted-text">No accounts match the filters.</div>
+  </div>
+</ion-content>

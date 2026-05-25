@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Driver</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="app-card lg" style="background:linear-gradient(135deg,#2563EB,#3B82F6); color:#fff;">
+    <div class="muted-text" style="color:rgba(255,255,255,0.7); font-size:13px;">Welcome</div>
+    <div style="font-size: 22px; font-weight: 800;">{{ user?.full_name }}</div>
+    <div style="font-size: 13px; opacity: 0.85;">{{ user?.email }}</div>
+  </div>
+
+  <app-section-header title="My Bus"></app-section-header>
+  <app-bus-card *ngIf="bus" [bus]="$any(bus)" [showCapacity]="true"></app-bus-card>
+  <div class="app-card" *ngIf="!bus">
+    <div class="muted-text">No bus assigned. Ask the administrator to assign you one.</div>
+  </div>
+
+  <div class="grid-2" *ngIf="bus">
+    <div class="app-card stat" (click)="router.navigate(['/app/driver/scan'])">
+      <div class="title">Scan QR</div>
+      <div class="muted-text text-small">Verify and board students</div>
+    </div>
+    <div class="app-card stat" (click)="startRound()">
+      <div class="title">Start round</div>
+      <div class="muted-text text-small">Notify students for today</div>
+    </div>
+    <div class="app-card stat" (click)="router.navigate(['/app/driver/bus'])">
+      <div class="title">Update bus</div>
+      <div class="muted-text text-small">Color, plate, capacity</div>
+    </div>
+    <div class="app-card stat" (click)="syncNow()">
+      <div class="title">Sync scans</div>
+      <div class="muted-text text-small">{{ pendingScans }} pending</div>
+    </div>
+  </div>
+</ion-content>

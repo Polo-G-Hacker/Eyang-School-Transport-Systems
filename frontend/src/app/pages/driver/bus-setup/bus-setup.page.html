@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>My Bus</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="app-card" *ngIf="!bus">
+    <div class="muted-text">No bus assigned to you yet. Ask the administrator.</div>
+  </div>
+
+  <div class="app-card" *ngIf="bus">
+    <ion-item lines="full">
+      <ion-input label="Plate number" labelPlacement="floating" [(ngModel)]="plate_number"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-input label="Color" labelPlacement="floating" [(ngModel)]="color"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-input label="Capacity" labelPlacement="floating" type="number" [(ngModel)]="capacity"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="stacked">Status</ion-label>
+      <ion-select [(ngModel)]="status">
+        <ion-select-option value="idle">Idle</ion-select-option>
+        <ion-select-option value="on_route">On route</ion-select-option>
+        <ion-select-option value="maintenance">Maintenance</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button expand="block" (click)="save()" [disabled]="saving">
+      <ion-spinner *ngIf="saving" name="dots" slot="start"></ion-spinner>
+      Save changes
+    </ion-button>
+  </div>
+
+  <ion-button expand="block" fill="outline" color="danger" (click)="logout()">
+    <ion-icon name="log-out-outline" slot="start"></ion-icon> Sign out
+  </ion-button>
+</ion-content>

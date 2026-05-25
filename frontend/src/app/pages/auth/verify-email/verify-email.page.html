@@ -1,0 +1,44 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="login-wrap">
+    <div class="brand">
+      <div class="logo-circle"><ion-icon name="checkmark-done-outline"></ion-icon></div>
+      <div class="app-name">Verify your email</div>
+    </div>
+
+    <div class="app-card lg login-card">
+      <div *ngIf="status === 'idle'">
+        <p class="muted-text">Paste the verification token from your email below, or click the link sent to your inbox.</p>
+        <ion-item lines="full">
+          <ion-input label="Token" labelPlacement="floating" [(ngModel)]="token"></ion-input>
+        </ion-item>
+        <ion-button expand="block" class="primary-btn" (click)="run()" [disabled]="!token">Verify</ion-button>
+      </div>
+
+      <div *ngIf="status === 'loading'" style="text-align:center;">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p class="muted-text">Verifying…</p>
+      </div>
+
+      <div *ngIf="status === 'success'" style="text-align:center;">
+        <ion-icon name="checkmark-circle" style="font-size:48px;color:#10B981;"></ion-icon>
+        <h2 class="title">Verified</h2>
+        <p class="muted-text">{{ message }}</p>
+        <ion-button expand="block" class="primary-btn" (click)="goLogin()">Continue to sign in</ion-button>
+      </div>
+
+      <div *ngIf="status === 'error'" style="text-align:center;">
+        <ion-icon name="close-circle" style="font-size:48px;color:#EF4444;"></ion-icon>
+        <h2 class="title">Verification failed</h2>
+        <p class="muted-text">{{ message }}</p>
+        <ion-item lines="full">
+          <ion-input label="Email" labelPlacement="floating" type="email" [(ngModel)]="email"></ion-input>
+        </ion-item>
+        <ion-button expand="block" class="primary-btn" (click)="resend()" [disabled]="!email || resending">
+          <ion-spinner *ngIf="resending" name="dots" slot="start"></ion-spinner>
+          Send a new link
+        </ion-button>
+        <ion-button expand="block" fill="clear" (click)="goLogin()">Back to sign in</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

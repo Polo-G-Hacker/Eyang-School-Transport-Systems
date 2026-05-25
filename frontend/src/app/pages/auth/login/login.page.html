@@ -1,0 +1,48 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="login-wrap">
+    <div class="brand">
+      <div class="logo-circle"><ion-icon name="bus-outline"></ion-icon></div>
+      <div class="school">{{ schoolName }}</div>
+      <div class="app-name">{{ appName }}</div>
+    </div>
+
+    <form (ngSubmit)="submit()" #form="ngForm" class="app-card lg login-card">
+      <h2 class="title">Welcome back</h2>
+      <p class="muted-text text-small">Sign in with your school or personal email.</p>
+
+      <ion-item lines="full">
+        <ion-input
+          label="Email"
+          labelPlacement="floating"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          autocomplete="email"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-input
+          label="Password"
+          labelPlacement="floating"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          autocomplete="current-password"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="submit" [disabled]="loading || !email || !password" class="primary-btn">
+        <ion-spinner *ngIf="loading" name="dots" slot="start"></ion-spinner>
+        Sign in
+      </ion-button>
+
+      <div class="row-flex space-between extra">
+        <a routerLink="/register">Create account</a>
+        <a routerLink="/verify-email">Verify email</a>
+      </div>
+    </form>
+  </div>
+</ion-content>

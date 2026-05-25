@@ -1,0 +1,49 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>QR Scanner</ion-title>
+    <ion-buttons slot="end">
+      <ion-chip [color]="online ? 'success' : 'warning'">
+        <ion-icon [name]="online ? 'wifi-outline' : 'cloud-offline-outline'"></ion-icon>
+        <ion-label>{{ online ? 'Online' : 'Offline' }}</ion-label>
+      </ion-chip>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div id="qr-host" class="qr-host"></div>
+
+  <div class="app-card" *ngIf="lastResult">
+    <div class="row-flex">
+      <div class="result-icon" [class.success]="lastResult.result === 'boarded'" [class.danger]="lastResult.result === 'denied'">
+        <ion-icon [name]="lastResult.result === 'boarded' ? 'checkmark-circle' : 'close-circle'"></ion-icon>
+      </div>
+      <div>
+        <div class="bold">{{ lastResult.user?.full_name || (lastResult.result === 'boarded' ? 'Boarded' : 'Denied') }}</div>
+        <div class="muted-text text-small">{{ lastResult.reason || (lastResult.result === 'boarded' ? 'Welcome on board' : 'Access denied') }}</div>
+      </div>
+    </div>
+  </div>
+
+  <app-section-header title="Manual entry"></app-section-header>
+  <div class="app-card">
+    <ion-item lines="full">
+      <ion-input label="Paste QR token" labelPlacement="floating" [(ngModel)]="manualToken"></ion-input>
+    </ion-item>
+    <ion-button expand="block" (click)="handleManual()" [disabled]="!manualToken">Validate</ion-button>
+  </div>
+
+  <app-section-header title="Recent scans" [action]="pending ? ('Sync ' + pending) : ''" (actionClick)="syncNow()"></app-section-header>
+  <div class="app-card" *ngFor="let r of recent">
+    <div class="row-flex space-between">
+      <div>
+        <div class="bold">{{ r.name }}</div>
+        <div class="muted-text text-small">{{ r.reason || (r.status === 'boarded' ? 'Boarded' : 'Denied') }}</div>
+      </div>
+      <div class="text-tiny muted-text">{{ r.at }}</div>
+    </div>
+  </div>
+  <div class="app-card" *ngIf="recent.length === 0">
+    <div class="muted-text">No scans yet.</div>
+  </div>
+</ion-content>

@@ -1,0 +1,136 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <div class="avatar-pill">
+        <div class="avatar-fallback">{{ (user?.full_name || '?') | slice:0:1 }}</div>
+        <div class="hello-stack">
+          <div class="hello">Welcome back</div>
+          <div class="name">{{ user?.full_name }}</div>
+        </div>
+      </div>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh(); $event.target.complete()">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="ion-padding">
+    <div class="row-flex space-between" style="margin-bottom:6px;">
+      <h1 class="page-title">My Transport</h1>
+      <app-status-badge [label]="payment ? 'Active' : 'Inactive'" [tone]="payment ? 'success' : 'muted'"></app-status-badge>
+    </div>
+    <div class="muted-text text-small" style="margin-bottom: 16px;">
+      <span *ngIf="user?.program">{{ user?.program?.level }} — {{ user?.program?.field }}</span>
+      <span *ngIf="user?.program"> · </span>
+      <span>{{ currentPeriodLabel }}</span>
+    </div>
+
+    <div class="app-card swipe-card" *ngIf="activeRound">
+      <div class="row-flex">
+        <div class="dot"></div>
+        <div>
+          <div class="bold">Pickup Round Started!</div>
+          <div class="muted-text text-small">Driver is on the way. Will you be at your pickup point today?</div>
+        </div>
+      </div>
+      <div class="swipe-actions">
+        <ion-button color="primary" (click)="respondSwipe('yes')">Yes, I'll be there</ion-button>
+        <ion-button fill="outline" color="medium" (click)="respondSwipe('no')">No, skip today</ion-button>
+      </div>
+    </div>
+
+    <app-section-header title="Payment"></app-section-header>
+    <div class="app-card payment-card" [class.active]="payment">
+      <div class="row-flex space-between">
+        <div class="row-flex">
+          <div class="check-circle" [class.active]="payment">
+            <ion-icon [name]="payment ? 'checkmark' : 'time-outline'"></ion-icon>
+          </div>
+          <div>
+            <div class="bold">{{ payment ? 'Payment Active' : 'Payment pending' }}</div>
+            <div class="muted-text text-small">
+              {{ payment ? 'Valid until end of ' + currentPeriodLabel : 'Ask the administrator to validate your payment.' }}
+            </div>
+          </div>
+        </div>
+        <div class="amount">{{ fee | number }} FCFA</div>
+      </div>
+    </div>
+
+    <app-section-header title="My Reservation" [action]="reservation ? 'Change' : 'Reserve'" (actionClick)="goReservation()"></app-section-header>
+    <div class="app-card reservation-card" *ngIf="reservation" >
+      <div class="row-flex space-between">
+        <app-status-badge label="Confirmed" tone="success"></app-status-badge>
+        <span class="muted-text text-small">{{ currentPeriodLabel }}</span>
+      </div>
+      <div class="bus-line">Bus {{ reservation.bus_plate || reservation.bus_id }}</div>
+      <div class="muted-text text-small">{{ reservation.pickup_name }} ➜ Eyang</div>
+    </div>
+    <div class="app-card" *ngIf="!reservation">
+      <div class="muted-text">No reservation for this month yet.</div>
+      <ion-button expand="block" (click)="goReservation()" style="margin-top:8px;">Reserve a spot</ion-button>
+    </div>
+
+    <app-section-header title="My QR Pass" action="Full screen" (actionClick)="router.navigate(['/app/student/qr'])"></app-section-header>
+    <div class="qr-card">
+      <div class="qr-card__header">
+        <span>{{ currentPeriodLabel }}</span>
+        <span class="bold">Transport Pass</span>
+      </div>
+      <div class="qr-card__body">
+        <div class="qr-img-wrap" *ngIf="qrDataUrl">
+          <img [src]="qrDataUrl" alt="QR" />
+        </div>
+        <div class="qr-img-wrap empty" *ngIf="!qrDataUrl">
+          <ion-icon name="qr-code-outline"></ion-icon>
+          <p class="muted-text text-small">Awaiting payment validation</p>
+        </div>
+        <div class="qr-meta">
+          <div class="bold">{{ user?.full_name }}</div>
+          <div class="muted-text text-small">{{ user?.student_id || '—' }}</div>
+          <app-status-badge *ngIf="qrAvailableOffline" label="Available offline" tone="success"></app-status-badge>
+        </div>
+      </div>
+    </div>
+
+    <app-section-header title="Bus Location" action="Open map" (actionClick)="goTrack()"></app-section-header>
+    <div class="app-card map-stub" (click)="goTrack()">
+      <div class="map-grid"></div>
+      <div class="map-bus">{{ reservation?.bus_plate || 'LT —' }}</div>
+      <div class="map-you">You</div>
+      <div class="map-live"><span class="live-dot"></span>Live</div>
+      <div class="map-eta">Tap to open full map</div>
+    </div>
+
+    <app-section-header title="My Pickup Point"></app-section-header>
+    <div class="app-card">
+      <div class="row-flex">
+        <div class="circle"><ion-icon name="location-outline"></ion-icon></div>
+        <div>
+          <div class="bold">{{ user?.pickup_point?.name || 'Not set' }}</div>
+          <div class="muted-text text-small">Route: TKC ➜ MEEC ➜ Vogt ➜ Poste Centrale ➜ Famassi ➜ Eyang</div>
+        </div>
+      </div>
+    </div>
+
+    <app-section-header title="Notifications" action="View all"></app-section-header>
+    <div class="app-card" *ngFor="let n of notifications">
+      <div class="row-flex space-between">
+        <div class="bold">{{ n.title }}</div>
+        <div class="muted-text text-tiny">{{ n.created_at | date:'short' }}</div>
+      </div>
+      <div class="muted-text text-small">{{ n.body }}</div>
+    </div>
+    <div class="app-card" *ngIf="notifications.length === 0 && !loading">
+      <div class="muted-text">No notifications yet.</div>
+    </div>
+  </div>
+</ion-content>

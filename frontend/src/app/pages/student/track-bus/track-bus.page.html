@@ -1,0 +1,21 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Track Bus</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="refresh()"><ion-icon name="refresh-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div #mapHost class="map-host"></div>
+  <div class="bus-list">
+    <div *ngFor="let b of buses" class="bus-row">
+      <div class="dot" [style.background]="b.status === 'on_route' ? '#10B981' : '#94A3B8'"></div>
+      <div>
+        <div class="bold">{{ b.plate_number }} <span class="muted-text">· {{ b.color }}</span></div>
+        <div class="muted-text text-tiny">{{ b.driver_name }} · {{ b.status }}</div>
+      </div>
+    </div>
+  </div>
+</ion-content>

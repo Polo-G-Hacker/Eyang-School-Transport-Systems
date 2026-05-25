@@ -1,0 +1,62 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Payment Validations</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="app-card" *ngIf="summary">
+    <div class="row-flex space-between">
+      <div>
+        <div class="muted-text text-small">Total collected</div>
+        <div class="big">{{ summary.total_collected | number }} {{ currency }}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="muted-text text-small">Expected</div>
+        <div>{{ summary.expected | number }} {{ currency }}</div>
+      </div>
+    </div>
+    <app-progress-bar
+      [value]="summary.collection_rate"
+      [max]="100"
+      [tone]="summary.collection_rate >= 80 ? 'success' : summary.collection_rate >= 50 ? 'warning' : 'danger'"></app-progress-bar>
+    <div class="muted-text text-tiny" style="margin-top:6px;">{{ summary.collection_rate }}% collected</div>
+  </div>
+
+  <div class="grid-4">
+    <app-stat-card label="Validated" [value]="summary?.validated || 0" tone="success" icon="checkmark-circle-outline"></app-stat-card>
+    <app-stat-card label="Pending" [value]="summary?.pending || 0" tone="warning" icon="time-outline"></app-stat-card>
+    <app-stat-card label="Unpaid" [value]="summary?.unpaid || 0" tone="muted" icon="close-circle-outline"></app-stat-card>
+    <app-stat-card label="Expired" [value]="summary?.expired || 0" tone="danger" icon="alert-circle-outline"></app-stat-card>
+  </div>
+
+  <ion-searchbar [(ngModel)]="search" (ionChange)="refresh()" debounce="400" placeholder="Search by name"></ion-searchbar>
+
+  <ion-segment [(ngModel)]="filter" (ionChange)="refresh()" scrollable>
+    <ion-segment-button value=""><ion-label>All</ion-label></ion-segment-button>
+    <ion-segment-button value="pending"><ion-label>Pending</ion-label></ion-segment-button>
+    <ion-segment-button value="validated"><ion-label>Validated</ion-label></ion-segment-button>
+    <ion-segment-button value="unpaid"><ion-label>Unpaid</ion-label></ion-segment-button>
+    <ion-segment-button value="expired"><ion-label>Expired</ion-label></ion-segment-button>
+  </ion-segment>
+
+  <div class="app-card" *ngFor="let p of payments; trackBy: tb">
+    <div class="row-flex space-between">
+      <div>
+        <div class="bold">{{ p.full_name }}</div>
+        <div class="muted-text text-small">{{ p.email }}</div>
+        <div class="muted-text text-tiny">{{ p.period_month }}/{{ p.period_year }} <span *ngIf="p.student_id"> · {{ p.student_id }}</span></div>
+      </div>
+      <div style="text-align:right;">
+        <div class="bold">{{ p.amount_fcfa | number }}</div>
+        <app-status-badge [label]="p.status" [tone]="tone(p.status)"></app-status-badge>
+      </div>
+    </div>
+    <div class="actions" *ngIf="p.status === 'pending' || p.status === 'unpaid'">
+      <ion-button size="small" color="success" (click)="validate(p)">Validate cash payment</ion-button>
+    </div>
+  </div>
+  <div class="app-card" *ngIf="payments.length === 0 && !loading">
+    <div class="muted-text">No payments to show.</div>
+  </div>
+</ion-content>

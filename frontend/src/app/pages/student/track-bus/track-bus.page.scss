@@ -1,0 +1,17 @@
+.map-host { width:100%; height: 60vh; min-height: 380px; }
+.bus-list { padding: 12px; display: grid; gap: 8px; }
+.bus-row {
+  display:flex; align-items:center; gap:10px; padding: 10px 12px; background:#fff;
+  border-radius: 10px; border: 1px solid var(--app-card-border);
+}
+.dot { width:10px;height:10px;border-radius:50%; }
+.bold { font-weight: 600; }
+
+::ng-deep .bus-pin {
+  color: #fff; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700;
+  text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+::ng-deep .pickup-pin {
+  width: 22px; height: 22px; border-radius: 50%; display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); color: #fff; font-size: 12px;
+}
