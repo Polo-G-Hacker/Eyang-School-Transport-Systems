@@ -47,6 +47,7 @@ export async function scanBatch(req: Request, res: Response) {
         pickupPointId: ev.pickup_point_id ?? null,
         clientEventId: ev.client_event_id ?? null,
         scannedAt: ev.scanned_at ? new Date(ev.scanned_at) : undefined,
+        fromOfflineBatch: true,
       });
       results.push({ client_event_id: ev.client_event_id, outcome });
     } catch (e) {

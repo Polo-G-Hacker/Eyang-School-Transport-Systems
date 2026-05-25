@@ -15,6 +15,7 @@ export interface ScanInput {
   pickupPointId?: number | null;
   clientEventId?: string | null;
   scannedAt?: Date;
+  fromOfflineBatch?: boolean;
 }
 
 export interface ScanOutcome {
@@ -50,7 +51,7 @@ export async function scan(input: ScanInput): Promise<ScanOutcome> {
         reason: verification.reason ?? "invalid_qr",
         scanned_at: input.scannedAt,
         client_event_id: input.clientEventId ?? null,
-        synced_from_offline: !!input.clientEventId,
+        synced_from_offline: !!input.fromOfflineBatch,
       });
       if ("duplicate" in denial) return { result: "denied", reason: "duplicate_event" };
     }
@@ -70,7 +71,7 @@ export async function scan(input: ScanInput): Promise<ScanOutcome> {
       reason: "no_reservation_on_this_bus",
       scanned_at: input.scannedAt,
       client_event_id: input.clientEventId ?? null,
-      synced_from_offline: !!input.clientEventId,
+      synced_from_offline: !!input.fromOfflineBatch,
     });
     if ("duplicate" in r) return { result: "denied", reason: "duplicate_event" };
     return { result: "denied", reason: "no_reservation_on_this_bus" };
@@ -93,7 +94,7 @@ export async function scan(input: ScanInput): Promise<ScanOutcome> {
     result: "boarded",
     scanned_at: input.scannedAt,
     client_event_id: input.clientEventId ?? null,
-    synced_from_offline: !!input.clientEventId,
+    synced_from_offline: !!input.fromOfflineBatch,
   });
   if ("duplicate" in inserted) return { result: "denied", reason: "duplicate_event" };
 

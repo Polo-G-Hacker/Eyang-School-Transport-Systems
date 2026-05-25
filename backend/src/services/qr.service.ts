@@ -35,11 +35,30 @@ export async function issueForUser(userId: string, p: Period = currentPeriod()):
   }
 
   const expires_at = endOfPeriod(p);
+  const period_label = `${p.year}-${String(p.month).padStart(2, "0")}`;
+
+  // Reuse existing token if it is still valid (signature + not revoked + payment still tied).
+  const existing = await qrRepo.findCurrent(userId, p.year, p.month);
+  if (existing && !existing.revoked_at && existing.expires_at > new Date() && existing.payment_id === payment.id) {
+    try {
+      jwt.verify(existing.token, env.qr.secret, { issuer: QR_ISSUER, audience: QR_AUDIENCE });
+      return {
+        token: existing.token,
+        payload: { uid: user.id, sid: user.student_id, pid: payment.id, pm: period_label, iss: QR_ISSUER, aud: QR_AUDIENCE },
+        expires_at: existing.expires_at,
+        user_full_name: user.full_name,
+        student_id: user.student_id,
+      };
+    } catch {
+      // Signature no longer verifies (e.g. secret rotated). Fall through to mint a new token.
+    }
+  }
+
   const payload: QrPayload = {
     uid: user.id,
     sid: user.student_id,
     pid: payment.id,
-    pm: `${p.year}-${String(p.month).padStart(2, "0")}`,
+    pm: period_label,
     iss: QR_ISSUER,
     aud: QR_AUDIENCE,
   };
