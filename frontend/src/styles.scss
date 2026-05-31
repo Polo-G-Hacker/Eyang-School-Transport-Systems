@@ -1,0 +1,140 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "leaflet/dist/leaflet.css";
+
+:root {
+  --ion-font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ion-color-primary: #215be6;
+  --ion-color-success: #18b957;
+  --ion-background-color: #f6f7fb;
+  color-scheme: light;
+}
+
+body { background: #f6f7fb; }
+ion-content { --background: #f6f7fb; }
+ion-toolbar { --background: #fff; --border-color: #e5e9f2; }
+
+.page {
+  max-width: 560px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 28px 18px 92px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.avatar, .icon-pill {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #eaf0ff;
+  color: #215be6;
+  font-weight: 800;
+}
+
+.muted { color: #8b98ad; }
+.title { font-size: 28px; font-weight: 850; letter-spacing: 0; margin: 0 0 4px; color: #171b26; }
+.section-title { font-size: 20px; font-weight: 800; margin: 26px 0 14px; color: #171b26; }
+
+.status {
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 800;
+  font-size: 13px;
+  background: #d9f9e5;
+  color: #18a650;
+  white-space: nowrap;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e2e7f0;
+  border-radius: 22px;
+  box-shadow: 0 1px 2px rgba(22, 29, 41, .03);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric {
+  min-height: 126px;
+  padding: 18px;
+  border-radius: 16px;
+}
+
+.metric strong { display: block; font-size: 30px; margin-top: 12px; color: #215be6; }
+.metric span { font-weight: 700; color: #171b26; }
+.metric small { color: #8b98ad; }
+.soft-blue { background: #dce7ff; }
+.soft-green { background: #d9f9e5; }
+.soft-yellow { background: #fff3c9; }
+.soft-red { background: #ffe2e2; }
+
+.primary-button {
+  --border-radius: 18px;
+  --box-shadow: none;
+  min-height: 54px;
+  font-weight: 800;
+}
+
+.ghost-button {
+  --border-radius: 18px;
+  --background: #edf1f7;
+  --background-activated: #e2e8f2;
+  --color: #171b26;
+  --box-shadow: none;
+  min-height: 54px;
+  font-weight: 800;
+}
+
+.list-card { overflow: hidden; }
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-bottom: 1px solid #e8edf5;
+}
+.row:last-child { border-bottom: 0; }
+.row-main { flex: 1; min-width: 0; }
+.row-main h3 { margin: 0; font-size: 16px; font-weight: 800; color: #1b1f2a; }
+.row-main p { margin: 4px 0 0; color: #8b98ad; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.amount { font-size: 17px; font-weight: 850; text-align: right; color: #171b26; }
+.tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-weight: 800; font-size: 12px; }
+.tag.pending { color: #e18400; background: #fff0c7; }
+.tag.validated { color: #18a650; background: #d9f9e5; }
+.tag.expired, .tag.denied { color: #ef4444; background: #ffe2e2; }
+
+.map-box {
+  height: 260px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid #e2e7f0;
+}
+
+ion-tab-bar {
+  --background: #fff;
+  --border: 1px solid #e5e9f2;
+  height: 72px;
+}
+
+@media (max-width: 360px) {
+  .page { padding-left: 14px; padding-right: 14px; }
+  .title { font-size: 24px; }
+  .metric strong { font-size: 26px; }
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Eyang Transport</string>
+    <string name="title_activity_main">Eyang Transport</string>
+    <string name="package_name">org.saintjean.ests</string>
+    <string name="custom_url_scheme">org.saintjean.ests</string>
+</resources>
