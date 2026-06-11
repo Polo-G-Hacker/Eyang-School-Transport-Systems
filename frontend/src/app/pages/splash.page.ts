@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonButton, IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { locationOutline, logInOutline, qrCodeOutline, shieldCheckmarkOutline } from 'ionicons/icons';
+import { locationOutline, logInOutline, personAddOutline, qrCodeOutline, shieldCheckmarkOutline } from 'ionicons/icons';
 
 @Component({
   standalone: true,
@@ -10,60 +10,180 @@ import { locationOutline, logInOutline, qrCodeOutline, shieldCheckmarkOutline } 
   template: `
     <ion-content fullscreen>
       <main class="splash">
-        <section class="brand-block">
-          <img class="crest" src="assets/st jean logo.png" alt="Saint Jean Ingenieur logo">
-          <div>
-            <p class="institute">Saint Jean</p>
-            <p class="muted">Ingenieur</p>
-            <p ><strong> <span>Eyang Transport Management System</span> </strong> </p>
-          </div>
-        </section>
-
-       
-
         <section class="actions">
-          <ion-button class="login-button" (click)="login()"><ion-icon name="log-in-outline" />Login</ion-button>
+          <ion-button class="login-button"  (click)="goToLogin()">
+            <ion-icon name="log-in-outline" slot="start" />
+            Login
+          </ion-button>
+          <ion-button class="signup-button" expand="block" (click)="goToSignup()">
+            <ion-icon name="person-add-outline" slot="start" />
+            Sign Up
+          </ion-button>
         </section>
 
         <section class="features">
-          <span><ion-icon name="shield-checkmark-outline" />Secure Access</span>
-          <span><ion-icon name="location-outline" />Live Tracking</span>
-          <span><ion-icon name="qr-code-outline" />QR Boarding</span>
+          <div class="feat-item"><ion-icon name="shield-checkmark-outline" /><span>Secure Access</span></div>
+          <div class="feat-item"><ion-icon name="location-outline" /><span>Live Tracking</span></div>
+          <div class="feat-item"><ion-icon name="qr-code-outline" /><span>QR Boarding</span></div>
         </section>
       </main>
     </ion-content>
   `,
   styles: [`
-    .splash{position:relative;min-height:100%;padding:54px 24px 28px;display:grid;grid-template-rows:auto 1fr auto auto;gap:22px;overflow:hidden;color:#fff;justify-items:end;text-align:right}
-    .splash::before{content:"";position:absolute;inset:0;background:linear-gradient(-90deg,rgba(4,22,54,.85) 0%,rgba(4,22,54,.6) 40%,rgba(4,22,54,.15) 100%),url('/assets/Eyang_splash.png') center/cover no-repeat}
-    .splash::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 58%,rgba(0,0,0,.5) 100%)}
-    .splash>*{position:relative;z-index:1;opacity:0.85}
-    .brand-block{display:flex;align-items:center;gap:14px;flex-direction:row-reverse}
-    .crest{width:74px;height:74px;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,.28))}
-    .institute{margin:0;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
-    .brand-block .muted{margin:2px 0 0;color:rgba(255,255,255,.82);font-weight:800;text-transform:uppercase;letter-spacing:4px}
-    .copy{align-self:center;max-width:360px;text-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .copy h1{margin:0;font-size:48px;line-height:1.06;font-weight:950}
-    .copy h1 span,.copy h1 strong{display:block}
-    .copy h1 strong{color:#f6c712}
-    .copy p{margin:22px 0 0;font-size:24px;font-weight:800}
-    .actions{display:grid;grid-template-columns:1fr;gap:14px;max-width:260px}
-    .actions ion-button{height:58px;margin:0;font-size:16px;font-weight:900;--border-radius:22px;text-transform:none}
-    .login-button{--background:#fff;--color:#0b3168}
-    .actions ion-icon{font-size:23px;margin-right:8px}
-    .features{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px}
-    .features span{display:flex;align-items:center;gap:10px;font-weight:850;color:rgba(255,255,255,.92);flex-direction:row-reverse}
-    .features ion-icon{width:34px;height:34px;border-radius:17px;background:#215be6;padding:8px}
-    @media (min-width: 520px){.splash{padding:70px 64px 44px}.copy h1{font-size:62px}.features{grid-template-columns:repeat(3,max-content);justify-content:end}}
-    @media (max-height: 700px){.splash{padding-top:34px}.crest{width:58px;height:58px}.copy h1{font-size:40px}.copy p{font-size:20px;margin-top:14px}.features{display:none}}
+    .splash {
+      position: relative;
+      min-height: 100%;
+      padding: 60px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .splash::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url('/assets/Splash_Screen.jpg') center/cover no-repeat;
+      z-index: 0;
+    }
+
+    .splash > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .crest {
+      width: 60px;
+      height: 60px;
+      background: white;
+      padding: 6px;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .institute {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .system-name {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: #3b82f6;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .hero-copy {
+      margin: 40px 0;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero-copy h1 {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero-copy h1 span {
+      display: block;
+      color: #3b82f6;
+    }
+
+    .hero-copy p {
+      font-size: 18px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .actions ion-button {
+      height: 60px;
+      --border-radius: 18px;
+      font-weight: 800;
+      font-size: 16px;
+      text-transform: none;
+      margin: 0;
+    }
+
+    .login-button {
+      --background: #fff;
+      --color: #0f172a;
+      max-width: 200px;
+    }
+
+    .signup-button {
+      --background: rgba(255,255,255,0.15);
+      --color: #fff;
+      backdrop-filter: blur(10px);
+      max-width: 200px;
+    }
+
+    .features {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .feat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .feat-item ion-icon {
+      font-size: 24px;
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .feat-item span {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+    }
+
+    @media (max-height: 700px) {
+      .hero-copy h1 { font-size: 32px; }
+      .hero-copy p { font-size: 16px; }
+      .features { display: none; }
+    }
   `]
 })
 export class SplashPage {
   constructor(private router: Router) {
-    addIcons({ logInOutline, shieldCheckmarkOutline, locationOutline, qrCodeOutline });
+    addIcons({ logInOutline, personAddOutline, shieldCheckmarkOutline, locationOutline, qrCodeOutline });
   }
 
-  login() {
-    return this.router.navigateByUrl('/login');
+  goToLogin() {
+    this.router.navigate(['/login'], { queryParams: { mode: 'login' } });
+  }
+
+  goToSignup() {
+    this.router.navigate(['/login'], { queryParams: { mode: 'signup' } });
   }
 }

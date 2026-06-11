@@ -1,0 +1,87 @@
+<ion-content scrollY="true" class="auth-content">
+  <main class="auth-page auth-page--signup">
+    <div class="auth-bg" aria-hidden="true"></div>
+
+    <section class="auth-shell" aria-labelledby="signup-title">
+
+      <form class="auth-card" [formGroup]="signupForm" (ngSubmit)="register()" novalidate>
+        <div class="card-heading">
+          <span class="heading-icon heading-icon--green">
+            <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
+          </span>
+          <div>
+            <h2 id="signup-title">Create Account</h2>
+            <p>Join the Student Bus System</p>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="signup-name">Full Name</label>
+          <ion-item lines="none" class="auth-input">
+            <ion-icon name="person-outline" slot="start" aria-hidden="true"></ion-icon>
+            <ion-input id="signup-name" autocomplete="name" placeholder="Enter your full name" formControlName="fullName" aria-label="Full Name"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <label for="signup-email">Email</label>
+          <ion-item lines="none" class="auth-input">
+            <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+            <ion-input id="signup-email" type="email" inputmode="email" autocomplete="email" placeholder="Enter your email" formControlName="email" aria-label="Email"></ion-input>
+          </ion-item>
+        </div>
+
+        <fieldset class="role-field">
+          <legend>Role</legend>
+          <div class="role-options" role="radiogroup" aria-label="Role">
+            <button type="button" class="role-card" [class.active]="signupForm.controls.role.value === 'student'" [attr.aria-pressed]="signupForm.controls.role.value === 'student'" (click)="selectRole('student')">
+              <ion-icon name="school-outline" aria-hidden="true"></ion-icon>
+              Student
+            </button>
+            <button type="button" class="role-card" [class.active]="signupForm.controls.role.value === 'driver'" [attr.aria-pressed]="signupForm.controls.role.value === 'driver'" (click)="selectRole('driver')">
+              <ion-icon name="bus-outline" aria-hidden="true"></ion-icon>
+              Driver
+            </button>
+          </div>
+        </fieldset>
+
+        <div class="field-group">
+          <label for="signup-password">Password</label>
+          <ion-item lines="none" class="auth-input">
+            <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+            <ion-input id="signup-password" [type]="showPassword ? 'text' : 'password'" autocomplete="new-password" placeholder="Create a password" formControlName="password" aria-label="Password"></ion-input>
+            <ion-button type="button" fill="clear" class="icon-action" slot="end" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+              <ion-icon slot="icon-only" [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <label for="signup-confirm-password">Confirm Password</label>
+          <ion-item lines="none" class="auth-input">
+            <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+            <ion-input id="signup-confirm-password" [type]="showConfirmPassword ? 'text' : 'password'" autocomplete="new-password" placeholder="Confirm your password" formControlName="confirmPassword" aria-label="Confirm Password"></ion-input>
+            <ion-button type="button" fill="clear" class="icon-action" slot="end" (click)="showConfirmPassword = !showConfirmPassword" [attr.aria-label]="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'">
+              <ion-icon slot="icon-only" [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+
+        @if (error) {
+          <ion-text color="danger" class="feedback">{{ error }}</ion-text>
+        }
+
+        <ion-button type="submit" expand="block" class="submit-button submit-button--green" [disabled]="loading">
+          <ion-icon name="person-add-outline" slot="start" aria-hidden="true"></ion-icon>
+          {{ loading ? 'Creating account...' : 'Sign Up' }}
+        </ion-button>
+
+        <p class="switch-copy">
+          Already have an account?
+          <a routerLink="/login">Login</a>
+        </p>
+      </form>
+    </section>
+
+  </main>
+</ion-content>

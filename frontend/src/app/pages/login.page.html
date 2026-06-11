@@ -1,0 +1,61 @@
+<ion-content scrollY="true" class="auth-content">
+  <main class="auth-page auth-page--login">
+    <div class="auth-bg" aria-hidden="true"></div>
+
+    <section class="auth-shell" aria-labelledby="login-title">
+
+      <form class="auth-card" [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+        <div class="card-heading">
+          <span class="heading-icon heading-icon--blue">
+            <ion-icon name="log-in-outline" aria-hidden="true"></ion-icon>
+          </span>
+          <div>
+            <h2 id="login-title">Welcome Back!</h2>
+            <p>Login to your account</p>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="login-email">Email</label>
+          <ion-item lines="none" class="auth-input">
+            <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+            <ion-input id="login-email" type="email" inputmode="email" autocomplete="email" placeholder="Enter your email" formControlName="email" aria-label="Email"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <label for="login-password">Password</label>
+          <ion-item lines="none" class="auth-input">
+            <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+            <ion-input id="login-password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password" placeholder="Enter your password" formControlName="password" aria-label="Password"></ion-input>
+            <ion-button type="button" fill="clear" class="icon-action" slot="end" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+              <ion-icon slot="icon-only" [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+
+        <div class="form-row">
+          <ion-checkbox labelPlacement="end" formControlName="remember">Remember me</ion-checkbox>
+          <a (click)="forgotPassword()" class="text-link" style="cursor: pointer;">Forgot password?</a>
+        </div>
+
+        @if (error) {
+          <ion-text color="danger" class="feedback">{{ error }}</ion-text>
+        }
+        @if (successMessage) {
+          <ion-text color="success" class="feedback">{{ successMessage }}</ion-text>
+        }
+
+        <ion-button type="submit" expand="block" class="submit-button submit-button--blue" [disabled]="loading">
+          <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </ion-button>
+
+        <p class="switch-copy">
+          Don't have an account?
+          <a routerLink="/signup">Sign Up</a>
+        </p>
+      </form>
+    </section>
+  </main>
+</ion-content>

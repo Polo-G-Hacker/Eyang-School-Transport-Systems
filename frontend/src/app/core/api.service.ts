@@ -12,6 +12,22 @@ export class ApiService {
     return this.http.post<AuthResponse>(`${environment.apiBaseUrl}/auth/login`, { email, password });
   }
 
+  forgotPassword(email: string) {
+    return this.http.post<{ message: string }>(`${environment.apiBaseUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(payload: { token: string; password: string }) {
+    return this.http.post<{ message: string }>(`${environment.apiBaseUrl}/auth/reset-password`, payload);
+  }
+
+  verifyEmail(token: string) {
+    return this.http.post<{ message: string }>(`${environment.apiBaseUrl}/auth/verify-email`, { token });
+  }
+
+  register(payload: { fullName: string; email: string; password: string; role: 'student' | 'driver'; matricule?: string; levelLabel?: string; department?: string }) {
+    return this.http.post(`${environment.apiBaseUrl}/auth/register`, payload);
+  }
+
   bootstrap() {
     return this.http.get<BootstrapData>(`${environment.apiBaseUrl}/api/bootstrap`);
   }

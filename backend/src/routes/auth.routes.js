@@ -4,9 +4,76 @@ import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import { config } from '../config.js';
 import { query } from '../db.js';
-import { createVerification, hashToken, sendVerificationEmail } from '../services/mail.service.js';
+import { createPasswordResetToken, createVerification, hashToken, sendPasswordResetEmail, sendVerificationEmail } from '../services/mail.service.js';
 
 export const authRouter = express.Router();
+
+authRouter.post('/verify-email', async (req, res, next) => {
+  try {
+    const { token } = z.object({ token: z.string() }).parse(req.body);
+    const tokenHash = hashToken(token);
+    const found = await query(
+      `UPDATE email_verification_tokens
+       SET used_at=NOW()
+       WHERE token_hash=$1 AND used_at IS NULL AND expires_at > NOW()
+       RETURNING user_id`,
+      [tokenHash]
+    );
+    if (!found.rowCount) return res.status(400).json({ message: 'Invalid or expired verification token.' });
+    await query('UPDATE users SET is_email_verified=TRUE WHERE id=$1', [found.rows[0].user_id]);
+    res.json({ message: 'Email verified successfully. You can now log in.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+authRouter.post('/forgot-password', async (req, res, next) => {
+  try {
+    const { email } = z.object({ email: z.string().email() }).parse(req.body);
+    const user = await query('SELECT id, email FROM users WHERE email=LOWER($1)', [email]);
+
+    if (user.rowCount) {
+      const token = await createPasswordResetToken(user.rows[0].id);
+      await sendPasswordResetEmail(user.rows[0].email, token);
+    }
+
+    // Always return success to prevent email enumeration
+    res.json({ message: 'If an account exists with that email, a reset link has been sent.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+authRouter.post('/reset-password', async (req, res, next) => {
+  try {
+    const { token, password } = z.object({
+      token: z.string(),
+      password: z.string().min(8)
+    }).parse(req.body);
+
+    const tokenHash = hashToken(token);
+    const found = await query(
+      `UPDATE password_reset_tokens
+       SET used_at=NOW()
+       WHERE token_hash=$1 AND used_at IS NULL AND expires_at > NOW()
+       RETURNING user_id`,
+      [tokenHash]
+    );
+
+    if (!found.rowCount) {
+      return res.status(400).json({ message: 'Invalid or expired reset token.' });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    await query('UPDATE users SET password_hash=$1 WHERE id=$2', [passwordHash, found.rows[0].user_id]);
+
+    res.json({ message: 'Password has been reset successfully.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 authRouter.post('/register', async (req, res, next) => {
   try {
@@ -29,7 +96,7 @@ authRouter.post('/register', async (req, res, next) => {
     );
     const token = await createVerification(user.rows[0].id);
     await sendVerificationEmail(user.rows[0].email, token);
-    res.status(201).json({ message: 'Account created. Check email for verification.', userId: user.rows[0].id });
+    res.status(201).json({ message: 'Account created. Please check your email to verify your account.', userId: user.rows[0].id });
   } catch (error) {
     next(error);
   }
@@ -55,24 +122,6 @@ authRouter.post('/login', async (req, res, next) => {
       token,
       user: { id: user.id, fullName: user.full_name, email: user.email, role: user.role, emailVerified: user.is_email_verified, photoDataUrl: user.photo_data_url }
     });
-  } catch (error) {
-    next(error);
-  }
-});
-
-authRouter.post('/verify-email', async (req, res, next) => {
-  try {
-    const tokenHash = hashToken(String(req.body.token || ''));
-    const found = await query(
-      `UPDATE email_verification_tokens
-       SET used_at=NOW()
-       WHERE token_hash=$1 AND used_at IS NULL AND expires_at > NOW()
-       RETURNING user_id`,
-      [tokenHash]
-    );
-    if (!found.rowCount) return res.status(400).json({ message: 'Invalid or expired token' });
-    await query('UPDATE users SET is_email_verified=TRUE WHERE id=$1', [found.rows[0].user_id]);
-    res.json({ message: 'Email verified' });
   } catch (error) {
     next(error);
   }

@@ -5,6 +5,9 @@ export const routes: Routes = [
   { path: '', redirectTo: 'splash', pathMatch: 'full' },
   { path: 'splash', loadComponent: () => import('./pages/splash.page').then(m => m.SplashPage) },
   { path: 'login', loadComponent: () => import('./pages/login.page').then(m => m.LoginPage) },
+  { path: 'signup', loadComponent: () => import('./pages/signup.page').then(m => m.SignupPage) },
+  { path: 'reset-password', loadComponent: () => import('./pages/reset-password.page').then(m => m.ResetPasswordPage) },
+  { path: 'verify-email', loadComponent: () => import('./pages/verify-email.page').then(m => m.VerifyEmailPage) },
   {
     path: 'app',
     component: TabsPage,

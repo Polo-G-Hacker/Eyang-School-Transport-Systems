@@ -1,7 +1,12 @@
 import pg from 'pg';
 import { config } from './config.js';
 
-export const pool = new pg.Pool({ connectionString: config.databaseUrl });
+export const pool = new pg.Pool({
+  connectionString: config.databaseUrl,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 export async function query(text, params = []) {
   const started = Date.now();
@@ -11,3 +16,5 @@ export async function query(text, params = []) {
   }
   return result;
 }
+
+export default pool;

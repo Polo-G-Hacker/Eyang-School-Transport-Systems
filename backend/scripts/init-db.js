@@ -2,6 +2,9 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const databaseUrl = process.env.DATABASE_URL;
 
