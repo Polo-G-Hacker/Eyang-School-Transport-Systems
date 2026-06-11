@@ -7,7 +7,7 @@ WITH role_ids AS (
 students AS (
   INSERT INTO users (id, role_id, full_name, email, password_hash, matricule, level_label, department, is_email_verified)
   SELECT '11111111-1111-1111-1111-111111111111', student_role, 'Jean-Baptiste Ngono',
-         'student@saintjeaningenieur.org', '$2a$12$kuSNYDg5Z.AJbqVWsCwBeO7MGnRWskZ7dGC4sETXgyoPajmUwauzq',
+         'student@saintjeaningenieur.org', '$2a$12$ym8ewKgGwbJ6d/5Dy1NMveYl7yT.8giXh26bBUeU6sWlIy6Lr0QZy',
          'SJ-2025-0341', 'Master 1', 'Genie Civil', TRUE
   FROM role_ids
   ON CONFLICT (email) DO NOTHING
@@ -15,14 +15,14 @@ students AS (
 driver AS (
   INSERT INTO users (id, role_id, full_name, email, password_hash, is_email_verified)
   SELECT '22222222-2222-2222-2222-222222222222', driver_role, 'Kofi Mensah',
-         'driver@saintjeaningenieur.org', '$2a$12$K7PPVYMcXJ0VvzryC/WDP.ybOLPgw/dcARI26prvLy1lT8D5Fz8YG', TRUE
+         'driver@saintjeaningenieur.org', '$2a$12$51yz7i1mDQ6LCCiaKEtP3OJVWwihdls/VKWy0CnOue6QIpFYuVkry', TRUE
   FROM role_ids
   ON CONFLICT (email) DO NOTHING
 ),
 admin AS (
   INSERT INTO users (id, role_id, full_name, email, password_hash, is_email_verified)
   SELECT '33333333-3333-3333-3333-333333333333', admin_role, 'Admin User',
-         'admin@saintjeaningenieur.org', '$2a$12$C63IF.PNT1BWQou4gC3jVe8l2e9VPGeuZ9LuZgg1eNX1UCZ/QreLu', TRUE
+         'admin@saintjeaningenieur.org', '$2a$12$TsSqqWqQ4HCf6KnvUW1fAevqWMeaHJZGZQLeAyHL2rn/sYIvPQbO.', TRUE
   FROM role_ids
   ON CONFLICT (email) DO NOTHING
 )

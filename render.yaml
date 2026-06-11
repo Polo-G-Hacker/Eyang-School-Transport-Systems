@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: eyang-transport-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci --prefix backend
+    startCommand: npm start --prefix backend
+    initialDeployHook: npm run db:init --prefix backend
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: eyang-transport-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: QR_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: eyang-transport-db
+    plan: free
+    region: frankfurt
+    databaseName: eyang_transport
+    user: eyang_transport
